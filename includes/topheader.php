@@ -1,3 +1,19 @@
+<?php 
+    // Include the necessary configuration and session check
+    session_start();
+    include('includes/config.php');
+    error_reporting(0);
+    
+    if(strlen($_SESSION['login'])==0) { 
+        header('location:index.php');
+    } else {
+        // Fetch the logo dynamically from the database
+        $pagetype = 'home';
+        $query = mysqli_query($con, "SELECT PageImage FROM tblpages WHERE PageName='$pagetype'");
+        $row = mysqli_fetch_array($query);
+        $image = $row['PageImage'];
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -53,7 +69,11 @@
             </div>
 
             <div class="navbar-brand">
-                <a href="#"><img src="assets/images/logo.png" alt="seithipunal-logo" class="img-responsive logo"></a>                
+                <!-- <?php //if($image): ?> -->
+                    <a href="#"><img src="postimages/<?php echo htmlentities($image); ?>" alt="seithipunal-logo" class="img-responsive logo"></a>
+                <!-- <?php //else: ?>
+                    <a href="#"><img src="assets/images/logo.png" alt="seithipunal-logo" class="img-responsive logo"></a>
+                <?php //endif; ?> -->                
             </div>
             
             <div class="navbar-right">
@@ -88,3 +108,5 @@
             </div>
         </div>
     </nav>
+
+<?php } ?>

@@ -30,6 +30,13 @@ if(isset($_POST['login']))
             echo "<script>alert('Invalid Details');</script>";
         }
     }
+
+    /*Logo Show Starts*/
+        $pagetype = 'home';
+        $query = mysqli_query($con, "SELECT PageImage FROM tblpages WHERE PageName='$pagetype'");
+        $row = mysqli_fetch_array($query);
+        $image = $row['PageImage'];
+    /*Logo Show Ends*/
 ?>
 
 <!doctype html>
@@ -61,7 +68,7 @@ if(isset($_POST['login']))
             <div class="auth-left">
 				<div class="auth-box">
                     <div class="top">
-                        <img src="assets/images/logo.png" alt="seithipunal-logo">
+                        <img src="postimages/<?php echo htmlentities($image); ?>" alt="seithipunal-logo">
                     </div>
 					<div class="card">
                         <div class="header">
@@ -84,6 +91,9 @@ if(isset($_POST['login']))
                                     </label>								
                                 </div> -->
                                 <button type="submit" class="btn btn-danger btn-lg btn-block" name="login">LOGIN</button>
+                                <div class="bottom">
+                                    <span class="helper-text m-b-10"><i class="fa fa-lock"></i> <a href="forgot-password.php">Forgot password?</a></span>
+                                </div>
                             </form>
                         </div>
                     </div>

@@ -63,19 +63,20 @@
                             </li>
 
                             <li class="<?php echo in_array($currentPage, ['add-post.php', 'edit-post.php', 'manage-posts.php', 'trash-posts.php']) ? 'active' : ''; ?>">
-                                <a href="javascript:void(0);" class="has-arrow"><i class="icon-globe"></i> <span>Posts (News)</span></a>
+                                <a href="javascript:void(0);" class="has-arrow"><i class="icon-globe"></i> <span>News Posts</span></a>
                                 <ul>                                    
-                                    <li class="<?php echo ($currentPage == 'add-post.php') ? 'active' : ''; ?>"><a href="add-post.php">Add Posts</a></li>
-                                    <li class="<?php echo ($currentPage == 'manage-posts.php') ? 'active' : ''; ?>"><a href="manage-posts.php">Manage Posts</a></li>
+                                    <li class="<?php echo ($currentPage == 'add-post.php') ? 'active' : ''; ?>"><a href="add-post.php">Add News Posts</a></li>
+                                    <li class="<?php echo ($currentPage == 'manage-posts.php') ? 'active' : ''; ?>"><a href="manage-posts.php">Manage News Posts</a></li>
                                     <?php if ($_SESSION['utype'] == 1 || $_SESSION['utype'] == 0) { ?>
-                                    <li class="<?php echo ($currentPage == 'trash-posts.php') ? 'active' : ''; ?>"><a href="trash-posts.php">Trash Posts</a></li>
+                                    <li class="<?php echo ($currentPage == 'trash-posts.php') ? 'active' : ''; ?>"><a href="trash-posts.php">Trash News Posts</a></li>
                                     <?php } ?>
                                 </ul>
                             </li>
 
-                            <li class="<?php echo in_array($currentPage, ['aboutus.php', 'contactus.php', 'terms.php', 'privacy.php']) ? 'active' : ''; ?>">
+                            <li class="<?php echo in_array($currentPage, ['home.php', 'aboutus.php', 'contactus.php', 'terms.php', 'privacy.php']) ? 'active' : ''; ?>">
                                 <a href="javascript:void(0);vvvv" class="has-arrow"><i class="icon-docs"></i> <span>Pages</span></a>
                                 <ul>
+                                    <li class="<?php echo ($currentPage == 'home.php') ? 'active' : ''; ?>"><a href="home.php">Home</a> </li>
                                     <li class="<?php echo ($currentPage == 'aboutus.php') ? 'active' : ''; ?>"><a href="aboutus.php">About Us</a> </li>
                                     <li class="<?php echo ($currentPage == 'contactus.php') ? 'active' : ''; ?>"><a href="contactus.php">Contact Us</a> </li>
                                     <li class="<?php echo ($currentPage == 'terms.php') ? 'active' : ''; ?>"><a href="terms.php">Terms</a> </li>
