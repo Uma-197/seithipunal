@@ -350,7 +350,7 @@
                                     </div>
                                 </div><br>
                                 <?php } ?>
-                                <button type="submit" name="update" class="btn btn-block btn-primary   m-t-20">Update</button>
+                                <button type="submit" name="update" class="btn btn-primary m-t-20">Update</button>
                             </form>
                         </div>
                     </div>

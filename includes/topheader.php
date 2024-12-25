@@ -48,6 +48,7 @@
     <!-- MAIN CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/color_skins.css">
+    <link rel="stylesheet" href="assets/css/blog.css">
 </head>
 <body class="theme-cyan">
 

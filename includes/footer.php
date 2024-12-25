@@ -36,12 +36,12 @@
         $(document).ready(function() {
             $('#summernote').summernote({
                 height: 300,
-                focus: true
+                focus: false
             });
 
             $('#summernote2').summernote({
                 height: 300,
-                focus: true
+                focus: false
             });
         });
     </script>
@@ -130,7 +130,7 @@
             $(this).parent().find('.plan-title').append('<span><i class="fa fa-check-circle"></i></span>');
         });
     });
-    </script>
+</script>
 
 </body>
 </html>

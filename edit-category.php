@@ -93,7 +93,7 @@
                                     <textarea class="summernote" name="pagedescription" id="summernote"><?php //echo htmlentities($row['Description']);?></textarea>
                                 </div> -->
                                 <?php } ?>
-                                <button type="submit" name="submit" class="btn btn-block btn-primary   m-t-20" name="submit">Update</button>
+                                <button type="submit" name="submit" class="btn btn-primary   m-t-20" name="submit">Update</button>
                             </form>
                         </div>
                     </div>

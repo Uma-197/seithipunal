@@ -86,7 +86,7 @@
                                     <label class="control-label">Tag Description</label>
                                     <textarea class="summernote" name="pagedescription" id="summernote"></textarea>
                                 </div> -->
-                                <button type="submit" name="submit" class="btn btn-block btn-primary   m-t-20">Add Tag</button>
+                                <button type="submit" name="submit" class="btn btn-primary   m-t-20">Add Tag</button>
                             </form>
                         </div>
                     </div>

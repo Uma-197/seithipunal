@@ -143,7 +143,7 @@
                                     <input type="text" name="address" id="address" class="form-control" placeholder="Enter Address" required/>
                                 </div>
                                 
-                                <button type="submit" name="submit" class="btn btn-block btn-primary   m-t-20">Submit</button>
+                                <button type="submit" name="submit" class="btn btn-primary   m-t-20">Submit</button>
                             </form>
                         </div>
                     </div>

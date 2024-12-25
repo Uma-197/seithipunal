@@ -101,7 +101,7 @@
                                     <label class="control-label">Category Description</label>
                                     <textarea class="summernote" name="pagedescription" id="summernote"></textarea>
                                 </div> -->
-                                <button type="submit" name="submitsubcat" class="btn btn-block btn-primary   m-t-20">Add Sub Category</button>
+                                <button type="submit" name="submitsubcat" class="btn btn-primary   m-t-20">Add Sub Category</button>
                             </form>
                         </div>
                     </div>
