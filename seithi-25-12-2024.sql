@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 25, 2024 at 02:32 PM
+-- Generation Time: Dec 25, 2024 at 05:46 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 7.4.30
 
@@ -50,6 +50,34 @@ INSERT INTO `tbladmin` (`id`, `AdminUserName`, `AdminPassword`, `AdminEmailId`, 
 (1, 'Jithan', '25f9e794323b453885f5181f1b624d0b', 'admin@example.com', 7904269112, 'male', 'super admin', 1, 'No.5, Railway Station Road', '2022-12-12 13:00:00', '2024-12-25 09:00:24', 1),
 (2, 'Jai', '25f9e794323b453885f5181f1b624d0b', 'jai@gmail.com', 7904269112, 'male', 'staff', 2, '', '2024-12-22 12:26:00', '2024-12-24 16:52:22', 1),
 (3, 'Uma', '511f8de7e7cb0ad3f47b8f887aaf7dd6', 'uma@gmail.com', 7904269112, 'female', 'admin', 0, 'No.5, Railway Station Road', '2024-12-24 16:51:52', '2024-12-25 11:31:56', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbladvertisements`
+--
+
+CREATE TABLE `tbladvertisements` (
+  `id` int(11) NOT NULL,
+  `AdTitle` varchar(255) NOT NULL,
+  `AdDescription` longtext DEFAULT NULL,
+  `AdImage` varchar(255) NOT NULL,
+  `AdUrl` varchar(255) DEFAULT NULL,
+  `Is_Active` int(11) DEFAULT 1,
+  `StartDate` datetime DEFAULT NULL,
+  `EndDate` datetime DEFAULT NULL,
+  `PostingDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `UpdationDate` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbladvertisements`
+--
+
+INSERT INTO `tbladvertisements` (`id`, `AdTitle`, `AdDescription`, `AdImage`, `AdUrl`, `Is_Active`, `StartDate`, `EndDate`, `PostingDate`, `UpdationDate`) VALUES
+(1, 'test add', '', 'file:///C:/xampp/htdocs/Sathiya/admin/no-border/ui-icons.html', '2024-12-26', 1, '2024-12-28 00:00:00', '0000-00-00 00:00:00', '2024-12-25 16:26:13', '2024-12-25 16:26:13'),
+(2, 'test add', '<p>testing add</p>', '', 'file:///C:/xampp/htdocs/Sathiya/admin/no-border/ui-icons.html', 1, '2024-12-26 00:00:00', '2024-12-28 00:00:00', '2024-12-25 16:28:20', '2024-12-25 16:28:20'),
+(3, 'test add2', '<p>test add3</p>', '', 'file:///C:/xampp/htdocs/Sathiya/admin/no-border/ui-icons.html', 1, '2024-12-26 00:00:00', '2024-12-28 00:00:00', '2024-12-25 16:35:33', '2024-12-25 16:35:33');
 
 -- --------------------------------------------------------
 
@@ -217,6 +245,12 @@ ALTER TABLE `tbladmin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tbladvertisements`
+--
+ALTER TABLE `tbladvertisements`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tblcategory`
 --
 ALTER TABLE `tblcategory`
@@ -264,6 +298,12 @@ ALTER TABLE `tbltags`
 -- AUTO_INCREMENT for table `tbladmin`
 --
 ALTER TABLE `tbladmin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tbladvertisements`
+--
+ALTER TABLE `tbladvertisements`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --

@@ -323,7 +323,7 @@
                                     </div>
                                 </div><br>
 
-                                <button type="button" class="btn btn-secondary m-t-20" data-toggle="modal" data-target="#previewModal">Preview</button>
+                                <button type="button" class="btn btn-secondary m-t-20">Preview</button>
 
                                 <button type="submit" name="submit" class="btn btn-primary   m-t-20">Add Post</button>
                             </form>
@@ -334,70 +334,6 @@
 
         </div>
     </div>
-
-    <!-- Preview Modal -->
-<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="previewModalLabel">Preview Post</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h4>Title: <span id="previewTitle"></span></h4>
-        <h5>Tamil Title: <span id="previewTamilTitle"></span></h5>
-        <p><strong>Category:</strong> <span id="previewCategory"></span></p>
-        <p><strong>Sub Category:</strong> <span id="previewSubCategory"></span></p>
-        <p><strong>Tags:</strong> <span id="previewTags"></span></p>
-        <p><strong>Hashtags:</strong> <span id="previewHashtags"></span></p>
-        <p><strong>District:</strong> <span id="previewDistrict"></span></p>
-        <p><strong>Post Status:</strong> <span id="previewStatus"></span></p>
-        <p><strong>Latest News:</strong> <span id="previewLatestNews"></span></p>
-        <p><strong>Description:</strong> <span id="previewDescription"></span></p>
-        <p><strong>Short Description:</strong> <span id="previewShortDescription"></span></p>
-        <img src="" id="previewImage" alt="Feature Image" style="max-width: 100%; margin-top: 20px;">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Function to handle Preview button click
-  document.querySelector('[data-toggle="modal"]').addEventListener('click', function() {
-    // Get form values
-    var postTitle = document.getElementById('posttitle').value;
-    var tamilTitle = document.getElementById('tamiltitle').value;
-    var category = document.getElementById('category').options[document.getElementById('category').selectedIndex].text;
-    var subCategory = document.getElementById('subcategory').options[document.getElementById('subcategory').selectedIndex]?.text || '';
-    var tags = document.getElementById('maintag').options[document.getElementById('maintag').selectedIndex].text;
-    var hashtags = document.getElementById('hashtag').value;
-    var district = document.getElementById('district').options[document.getElementById('district').selectedIndex].text;
-    var status = document.getElementById('poststatus').options[document.getElementById('poststatus').selectedIndex].text;
-    var latestNews = document.getElementById('latestnews').value;
-    var description = document.getElementById('summernote').value;
-    var shortDescription = document.getElementById('summernote2').value;
-    var imageSrc = document.getElementById('postimage').files[0] ? URL.createObjectURL(document.getElementById('postimage').files[0]) : '';
-
-    // Update modal content
-    document.getElementById('previewTitle').textContent = postTitle;
-    document.getElementById('previewTamilTitle').textContent = tamilTitle;
-    document.getElementById('previewCategory').textContent = category;
-    document.getElementById('previewSubCategory').textContent = subCategory;
-    document.getElementById('previewTags').textContent = tags;
-    document.getElementById('previewHashtags').textContent = hashtags;
-    document.getElementById('previewDistrict').textContent = district;
-    document.getElementById('previewStatus').textContent = status;
-    document.getElementById('previewLatestNews').textContent = latestNews;
-    document.getElementById('previewDescription').textContent = description;
-    document.getElementById('previewShortDescription').textContent = shortDescription;
-    document.getElementById('previewImage').src = imageSrc;
-  });
-</script>
 
     
 <?php include('includes/footer.php');?>

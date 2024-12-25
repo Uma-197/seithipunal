@@ -99,6 +99,14 @@
                                 </ul>
                             </li>
 
+                            <li class="<?php echo in_array($currentPage, ['add-advertisement.php', 'edit-advertisement.php', 'manage-advertisements.php']) ? 'active' : ''; ?>">
+                                <a href="javascript:void(0);" class="has-arrow"><i class="fa fa-bullhorn"></i> <span>Advertisements</span></a>
+                                <ul>                                    
+                                    <li class="<?php echo ($currentPage == 'add-advertisement.php') ? 'active' : ''; ?>"><a href="add-advertisement.php">Add Advertisements</a></li>
+                                    <li class="<?php echo ($currentPage == 'manage-advertisements.php') ? 'active' : ''; ?>"><a href="manage-advertisements.php">Manage Advertisements</a></li>
+                                </ul>
+                            </li>
+
                             <li class="<?php echo in_array($currentPage, ['manage-reports.php', 'google-reports.php']) ? 'active' : ''; ?>">
                                 <a href="javascript:void(0);" class="has-arrow"><i class="fa fa-bar-chart-o"></i> <span>Reports</span></a>
                                 <ul>                                    
