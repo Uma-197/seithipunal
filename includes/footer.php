@@ -27,6 +27,8 @@
 
 <script src="assets/js/pages/ui/dialogs.js"></script>
 
+<script src="../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote/dist/summernote.min.js"></script>
 
@@ -110,9 +112,25 @@
             }, 5000); // 5 seconds
         }
     });
-
-
 </script>
+
+<script>
+    $(function() {
+        // photo upload
+        $('#btn-upload-photo').on('click', function() {
+            $(this).siblings('#filePhoto').trigger('click');
+        });
+
+        // plans
+        $('.btn-choose-plan').on('click', function() {
+            $('.plan').removeClass('selected-plan');
+            $('.plan-title span').find('i').remove();
+
+            $(this).parent().addClass('selected-plan');
+            $(this).parent().find('.plan-title').append('<span><i class="fa fa-check-circle"></i></span>');
+        });
+    });
+    </script>
 
 </body>
 </html>

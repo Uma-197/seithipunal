@@ -1,8 +1,8 @@
 
 <div id="left-sidebar" class="sidebar">
         <div class="sidebar-scroll">
-            <div class="user-account">
-                <!-- <img src="assets/images/user.png" class="rounded-circle user-photo" alt="User Profile Picture"> -->
+            <!-- <div class="user-account">
+                <img src="assets/images/user.png" class="rounded-circle user-photo" alt="User Profile Picture">
                 <div class="dropdown">
                     <?php
                         session_start();
@@ -14,7 +14,7 @@
                     <a href="javascript:void(0);" class="user-name" data-toggle="dropdown"><strong><?php echo htmlentities($userName); ?></strong></a>
                 </div>
                 <hr>
-            </div>
+            </div> -->
                 
             <!-- Tab panes -->
             <div class="tab-content p-l-0 p-r-0">
@@ -36,7 +36,7 @@
                                 if (isset($_SESSION['utype']) && $_SESSION['utype'] == 1) { 
                             ?>
                             <li class="<?php echo in_array($currentPage, ['add-subadmins.php', 'edit-subadmin.php', 'manage-subadmins.php']) ? 'active' : ''; ?>">
-                                <a href="javascript:void(0);" class="has-arrow"><i class="icon-users"></i> <span>Users</span></a>
+                                <a href="javascript:void(0);" class="has-arrow"><i class="fa fa-users"></i> <span>Users</span></a>
                                 <ul>
                                     <li class="<?php echo ($currentPage == 'add-subadmins.php') ? 'active' : ''; ?>"><a href="add-subadmins.php">Add User</a> </li>
                                     <li class="<?php echo ($currentPage == 'manage-subadmins.php') ? 'active' : ''; ?>"><a href="manage-subadmins.php">Manage Users</a> </li>
@@ -107,7 +107,7 @@
                             </li>
 
                             <li class="<?php echo ($currentPage == 'user-profile.php') ? 'active' : ''; ?>">
-                                <a href="javascript:void(0);" class="has-arrow"><i class="fa fa-weixin"></i> <span>User Profile</span></a>
+                                <a href="javascript:void(0);" class="has-arrow"><i class="fa fa-user"></i> <span>User Profile</span></a>
                                 <ul>
                                     <li class="<?php echo ($currentPage == 'user-profile.php') ? 'active' : ''; ?>"><a href="user-profile.php">Profile</a></li>
                                 </ul>

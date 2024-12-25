@@ -8,13 +8,23 @@ if(isset($_POST['login']))
         // Getting username/ email and password
         $uname=$_POST['username'];
         $password=md5($_POST['password']);
+
         // Fetch data from database on the basis of username/email and password
-        $sql =mysqli_query($con,"SELECT AdminUserName,AdminEmailId,AdminPassword,userType FROM tbladmin WHERE (AdminUserName='$uname' && AdminPassword='$password')");
-        $num=mysqli_fetch_array($sql);
+        $sql =mysqli_query($con,"SELECT AdminUserName, AdminEmailId, AdminPassword, PhoneNumber, Gender, UserRole, Address, userType FROM tbladmin WHERE (AdminUserName='$uname' && AdminPassword='$password')");
+        $num=mysqli_fetch_assoc($sql);
+
+        //echo'<pre>'; print_r($num);die;
+
         if($num>0)
         {
-            $_SESSION['login']=$_POST['username'];
+            $_SESSION['login']=$num['AdminUserName'];
             $_SESSION['utype']=$num['userType'];
+            $_SESSION['AdminEmailId']=$num['AdminEmailId'];
+            $_SESSION['PhoneNumber']=$num['PhoneNumber'];
+            $_SESSION['Gender']=$num['Gender'];
+            $_SESSION['UserRole']=$num['UserRole'];
+            $_SESSION['Address']=$num['Address'];
+
             echo "<script type='text/javascript'> document.location = 'dashboard.php'; </script>";
         }else{
             echo "<script>alert('Invalid Details');</script>";
@@ -46,8 +56,9 @@ if(isset($_POST['login']))
 <body class="theme-cyan">
 	<!-- WRAPPER -->
 	<div id="wrapper">
-		<div class="vertical-align-wrap">
-			<div class="vertical-align-middle auth-main">
+		<div class="auth-container">
+            <!-- Left Side (Login Form and Logo) -->
+            <div class="auth-left">
 				<div class="auth-box">
                     <div class="top">
                         <img src="assets/images/logo.png" alt="seithipunal-logo">
@@ -72,12 +83,16 @@ if(isset($_POST['login']))
                                         <span>Remember me</span>
                                     </label>								
                                 </div> -->
-                                <button type="submit" class="btn btn-primary btn-lg btn-block" name="login">LOGIN</button>
+                                <button type="submit" class="btn btn-danger btn-lg btn-block" name="login">LOGIN</button>
                             </form>
                         </div>
                     </div>
 				</div>
 			</div>
+
+            <!-- Right Side (Background Image) -->
+            <div class="auth-right"></div>
+            
 		</div>
 	</div>
 	<!-- END WRAPPER -->

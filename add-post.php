@@ -322,7 +322,7 @@
                                         </select>
                                     </div>
                                 </div><br>
-                                <button type="submit" name="submit" class="btn btn-block btn-primary   m-t-20">Add Category</button>
+                                <button type="submit" name="submit" class="btn btn-block btn-primary   m-t-20">Add Post</button>
                             </form>
                         </div>
                     </div>

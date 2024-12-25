@@ -95,6 +95,37 @@
                                     <label for="exampleInputusername">Username</label>
                                     <input type="text" placeholder="Enter Username"  name="sadminusername" id="sadminusername" class="form-control" value="<?php echo htmlentities($row['AdminUserName']);?>"  readonly>
                                 </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Email Id</label>
+                                    <input type="email" name="emailid" id="emailid" class="form-control" placeholder="Enter email" value="<?php echo htmlentities($row['AdminEmailId']);?>" readonly/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Phone Number</label>
+                                    <input type="text" name="phonenumber" id="phonenumber" class="form-control" placeholder="Enter Phone Number" value="<?php echo htmlentities($row['PhoneNumber']);?>" readonly/>
+                                </div>
+
+                                <?php
+                                    // Assuming $gender holds the saved value for gender from the database
+                                    $gender = isset($row['Gender']) ? $row['Gender'] : ''; // Replace $row['Gender'] with your variable
+                                ?>
+                                <div>
+                                    <label class="control-label">Gender</label><br>
+                                    <label class="fancy-radio">
+                                        <input name="gender2" value="male" type="radio" <?php echo ($gender === 'male') ? 'checked' : ''; ?> readonly onclick="return false;">
+                                        <span><i></i>Male</span>
+                                    </label>
+                                    <label class="fancy-radio">
+                                        <input name="gender2" value="female" type="radio" <?php echo ($gender === 'female') ? 'checked' : ''; ?> readonly onclick="return false;">
+                                        <span><i></i>Female</span>
+                                    </label>
+                                    <label class="fancy-radio">
+                                        <input name="gender2" value="other" type="radio" <?php echo ($gender === 'other') ? 'checked' : ''; ?> readonly onclick="return false;">
+                                        <span><i></i>Others</span>
+                                    </label>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="userrole">User Role</label>
                                     <select class="form-control" name="userrole" id="userrole" required>
@@ -102,19 +133,23 @@
                                        <option value="admin" <?php echo (isset($row['UserRole']) && $row['UserRole'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
                                        <option value="staff" <?php echo (isset($row['UserRole']) && $row['UserRole'] == 'staff') ? 'selected' : ''; ?>>Staff</option>
                                     </select>
-                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label">Email Id</label>
-                                    <input type="email" name="emailid" id="emailid" class="form-control" placeholder="Enter email" value="<?php echo htmlentities($row['AdminEmailId']);?>" readonly/>
                                 </div>
-                               <div class="form-group">
+
+                                <div class="form-group">
+                                    <label class="control-label">Address</label>
+                                    <input type="text" name="address" id="address" class="form-control" placeholder="Enter Address" value="<?php echo htmlentities($row['Address']);?>" readonly/>
+                                </div>
+
+                                <div class="form-group">
                                     <label class="control-label">Creation Dtae</label>
                                        <input type="text" class="form-control" value="<?php echo htmlentities($row['CreationDate']);?>" name="cdate" readonly>
                                 </div>
-                                 <div class="form-group">
+
+                                <div class="form-group">
                                     <label class="control-label">Updation date</label>
                                        <input type="text" class="form-control" value="<?php echo htmlentities($row['UpdationDate']);?>" name="udate" readonly>
-                                 </div>
+                                </div>
+
                                  <?php } ?>
                                 <button type="submit" name="submit" class="btn btn-block btn-primary   m-t-20">Update</button>
                             </form>

@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css">
     <link rel="stylesheet" href="assets/vendor/toastr/toastr.min.css">
 
+    <link rel="stylesheet" href="assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+
     <!-- MAIN CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/color_skins.css">
@@ -60,14 +62,28 @@
                     <button type="button" class="btn btn-default"><i class="icon-magnifier"></i></button>
                 </form>  --> 
 
-                <marquee behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();"><b>Today Trending News : </b><b>For any Info Contact </b>seithipunaltamil@gmail.com</marquee>              
+                <marquee behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();"><b>Today Trending News : </b><b>For any Info Contact </b>seithipunaltamil@gmail.com</marquee>
 
-                <div id="navbar-menu">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <a href="logout.php" class="icon-menu"><i class="icon-power"></i></a>
-                        </li>
-                    </ul>
+                <div class="user-account">
+                    <img src="assets/images/user.jpg" class="rounded-circle user-photo" alt="User Profile Picture">
+                    <div class="dropdown">
+                        <?php
+                        session_start();
+
+                        // Get the logged-in user's name from the session (if available)
+                        $userName = isset($_SESSION['login']) ? $_SESSION['login'] : 'Guest'; // Default to 'Guest' if not logged in
+                        ?>
+                        <span>Welcome,</span>
+                        <a href="javascript:void(0);" class="user-name" data-toggle="dropdown"><strong><?php echo htmlentities($userName); ?></strong></a>
+                    </div>             
+
+                    <div id="navbar-menu">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="logout.php" class="icon-menu"><i class="icon-power"></i></a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
