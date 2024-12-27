@@ -15,26 +15,36 @@
                 $startdate = $_POST['startdate'];
                 $enddate = $_POST['enddate'];
                 $addescription = $_POST['addescription'];
-                $status=1;
-
-                // Handle file upload for advertisement image
-                if(isset($_FILES["adimage"]) && $_FILES["adimage"]["name"] != "") {
-                    $adimage = $_FILES["adimage"]["name"];
-                    $adimage_temp = $_FILES["adimage"]["tmp_name"];
-                    $adimage_ext = pathinfo($adimage, PATHINFO_EXTENSION);
-                    $adimage_new = md5($adimage) . '.' . $adimage_ext;
-                    move_uploaded_file($adimage_temp, "advertisements/" . $adimage_new); // Save to ads folder
-                }
-                
-                $query=mysqli_query($con,"insert into tbladvertisements(AdTitle,AdImage,AdUrl,StartDate,EndDate,AdDescription,Is_Active) values('$adtitle', '$adimage_new', '$adurl', '$startdate', '$enddate', '$addescription', '$status')");
-
-                if($query)
+           
+                $imgfile=$_FILES["adimage"]["name"];
+                // get the image extension
+                $fileinfo = pathinfo($imgfile);
+                $extension = strtolower($fileinfo['extension']);
+                // allowed extensions
+                $allowed_extensions = array("jpg", "jpeg", "png", "gif");
+                // Validation for allowed extensions .in_array() function searches an array for a specific value.
+                if(!in_array($extension,$allowed_extensions))
                 {
-                    $msg="Advertisement created ";
+                    $error="Invalid format. Only jpg / jpeg/ png /gif format allowed";
                 }
-                else{
-                    $error="Something went wrong . Please try again.";    
-                } 
+                else
+                {
+                    // Use the actual file name
+                    $imgnewfile = $imgfile;
+
+                    // Code for move image into directory
+                    move_uploaded_file($_FILES["adimage"]["tmp_name"],"advertisements/".$imgnewfile);
+              
+                    $status=1;
+                    $query=mysqli_query($con,"insert into tbladvertisements(AdTitle,AdImage,AdUrl,StartDate,EndDate,AdDescription,Is_Active) values('$adtitle', '$imgnewfile', '$adurl', '$startdate', '$enddate', '$addescription', '$status')");
+                    if($query)
+                    {
+                        $msg="Advertisement successfully added ";
+                    }
+                    else{
+                        $error="Something went wrong . Please try again.";    
+                    }
+                }
             }
 
 ?>
@@ -87,7 +97,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="body">
-                            <form name="advertisement" method="post">
+                            <form name="advertisement" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label class="control-label">Advertisement Title</label>
                                     <input type="text" name="adtitle" id="adtitle" value="" class="form-control" placeholder="Enter Advertisement Title" required/>
