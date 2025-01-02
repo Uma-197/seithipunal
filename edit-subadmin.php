@@ -141,6 +141,34 @@
                                 </div>
 
                                 <div class="form-group">
+
+                                    <?php
+                                        // Assuming you fetched $row from the database where the password and IV are stored
+                                        $encrypted_password = $row['AdminPassword'];
+                                        $iv_hex = $row['Encryption_IV']; // The stored IV in hexadecimal format
+
+                                        // AES Encryption Key (the same key used during encryption)
+                                        $encryption_key = "xRUqKhsoZ5qV6y3kqARFJFdPqJvp7X2z"; // Use the same key for decryption
+
+                                        // Convert the stored IV from hex to binary
+                                        $iv = hex2bin($iv_hex);
+
+                                        // Decrypt the password
+                                        $decrypted_password = openssl_decrypt($encrypted_password, 'aes-256-cbc', $encryption_key, 0, $iv);
+                                    ?>
+
+                                    <label class="control-label">Password</label>
+                                    <div class="password-container">
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" value="<?php echo htmlentities($decrypted_password); ?>" readonly />
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="togglePasswordVisibility()">
+                                                <i id="toggleIcon" class="fa fa-eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <label class="control-label">Creation Dtae</label>
                                        <input type="text" class="form-control" value="<?php echo htmlentities($row['CreationDate']);?>" name="cdate" readonly>
                                 </div>
@@ -157,9 +185,25 @@
                     </div>
                 </div>            
             </div>
-
         </div>
     </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById("password");
+            const toggleIcon = document.getElementById("toggleIcon");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
     
 <?php include('includes/footer.php');?>
 

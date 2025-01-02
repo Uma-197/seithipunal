@@ -9611,3 +9611,46 @@ ul.list-connected-app>li:last-child .connected-app {
         /* Hide the right side completely */
     }
 }
+
+ /* Style for the password container to align input and icon */
+.password-container {
+    position: relative;
+}
+
+.password-container .form-control {
+    padding-right: 40px; /* Add space for the icon */
+}
+
+.password-container .input-group-append {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.password-container .input-group-text {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.password-container .fa {
+    font-size: 18px;
+    color: #6c757d;
+    transition: color 0.3s ease-in-out;
+}
+
+.password-container .fa-eye-slash {
+    color: #007bff;
+}
+
+.password-container .fa-eye {
+    color: #6c757d;
+}
+
+.password-container .form-control:focus {
+    padding-right: 40px; /* Keep the space for icon when focused */
+    border-color: #007bff; /* Highlight the border color when focused */
+}

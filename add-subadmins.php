@@ -1,48 +1,59 @@
 <?php
-    session_start();
-        include('includes/config.php');
-        error_reporting(0);
-        if(strlen($_SESSION['login'])==0)
-        { 
-            header('location:index.php');
-        }
-        else{
-   
-            // Code for Add New Sub Admi
-            if(isset($_POST['submit'])){
-                $username=$_POST['sadminusername'];
-                $userrole=$_POST['userrole'];
-                $email=$_POST['emailid'];
-                $password=md5($_POST['pwd']);
-                $phonenumber = $_POST['phonenumber'];
-                $gender = $_POST['gender2']; // Get selected gender value
-                $address = $_POST['address'];
-      
-                // Determine the usertype based on userrole
-                if ($userrole === 'admin') {
-                    $usertype = '0';
-                }  elseif ($userrole === 'staff') {
-                    $usertype = '2';
-                }  else {
-                // Optional: Handle other roles or set a default value
-                $usertype = '1'; // Example default value
-            }
+session_start();
+include('includes/config.php');
+error_reporting(0);
+if(strlen($_SESSION['login'])==0)
+{ 
+    header('location:index.php');
+}
+else{
 
-            // Check if the username or email already exists
-            $checkQuery = mysqli_query($con, "SELECT * FROM tbladmin WHERE AdminUserName='$username' OR AdminEmailId='$email'");
-            if (mysqli_num_rows($checkQuery) > 0) {
-                $error = "Username or Email already exists.";
+    // Code for Add New Sub Admin
+    if(isset($_POST['submit'])){
+        $username = $_POST['sadminusername'];
+        $userrole = $_POST['userrole'];
+        $email = $_POST['emailid'];
+        $password = $_POST['pwd'];
+        $phonenumber = $_POST['phonenumber'];
+        $gender = $_POST['gender2']; // Get selected gender value
+        $address = $_POST['address'];
+    
+        // AES Encryption Key (ensure to keep this key secure)
+        $encryption_key = "xRUqKhsoZ5qV6y3kqARFJFdPqJvp7X2z"; // Replace this with your encryption key
+
+        // Encrypt password using AES
+        $encrypted_password = openssl_encrypt($password, 'aes-256-cbc', $encryption_key, 0, $iv = random_bytes(openssl_cipher_iv_length('aes-256-cbc')));
+
+        // Determine the usertype based on userrole
+        if ($userrole === 'admin') {
+            $usertype = '0';
+        } elseif ($userrole === 'staff') {
+            $usertype = '2';
+        } else {
+            // Optional: Handle other roles or set a default value
+            $usertype = '1'; // Example default value
+        }
+
+        // Check if the username or email already exists
+        $checkQuery = mysqli_query($con, "SELECT * FROM tbladmin WHERE AdminUserName='$username' OR AdminEmailId='$email'");
+        if (mysqli_num_rows($checkQuery) > 0) {
+            $error = "Username or Email already exists.";
+        } else {
+
+            $query = mysqli_query($con, "INSERT INTO tbladmin(AdminUserName, UserRole, AdminEmailId, AdminPassword, userType, PhoneNumber, Gender, Address, Is_Active, Encryption_IV) 
+                                         VALUES('$username', '$userrole', '$email', '$encrypted_password', '$usertype', '$phonenumber', '$gender', '$address', 1, '" . bin2hex($iv) . "')");
+            if ($query) {
+                $msg = "User Created";
             } else {
-
-                $query=mysqli_query($con,"insert into tbladmin(AdminUserName,UserRole,AdminEmailId,AdminPassword,userType,PhoneNumber,Gender,Address,Is_Active ) values('$username','$userrole','$email','$password','$usertype','$phonenumber','$gender','$address',1)");
-                if($query){
-                    $msg="User Created ";
-                } else {
-                    $error="Something went wrong . Please try again."; 
-                }
+                $error = "Something went wrong. Please try again.";
             }
         }
-?> 
+    }
+
+?>
+
+<!-- Rest of your code remains the same -->
+ 
 
 
 <?php include('includes/topheader.php');?>

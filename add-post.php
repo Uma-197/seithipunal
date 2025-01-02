@@ -28,7 +28,10 @@
             $poststatus = $_POST['poststatus'];
             $arr = explode(" ",$posttitle);
             $url=implode("-",$arr);
-            $imgfile=$_FILES["postimage"]["name"];
+
+
+            //$imgfile=$_FILES["postimage"]["name"];
+            $imgfile = isset($_POST['selectedImage']) ? $_POST['selectedImage'] : $_FILES["postimage"]["name"];
             $videofile=$_FILES["postvideo"]["name"];
 
             // get the image extension
@@ -52,14 +55,19 @@
             }
             else
             {
-               //rename the image file
-               $imgnewfile=md5($imgfile).$extension;
+               if (!isset($_POST['selectedImage'])) {
+               $imgnewfile = md5($imgfile) . $extension;
+               move_uploaded_file($_FILES["postimage"]["tmp_name"], "postimages/" . $imgnewfile);
+            } else {
+               $imgnewfile = $imgfile; // Use selected image
+            }
 
                // Rename the video file (if uploaded)
                $videonewfile = $videofile ? md5($videofile) . $video_extension : null;
 
                // Code for move image into directory
-               move_uploaded_file($_FILES["postimage"]["tmp_name"],"postimages/".$imgnewfile);
+              // move_uploaded_file($_FILES["postimage"]["tmp_name"],"postimages/".$imgnewfile);
+
                if ($videofile) {
                   move_uploaded_file($_FILES["postvideo"]["tmp_name"], "postvideos/" . $videonewfile);
                }
@@ -87,15 +95,42 @@
 <?php include('includes/topheader.php');?>
 <script>
    function getSubCat(val) {
-   $.ajax({
-      type: "POST",
-      url: "get-subcategory.php",
-      data:'catid='+val,
-      success: function(data){
-         $("#subcategory").html(data);
-      }
-   });
+       $.ajax({
+          type: "POST",
+          url: "get-subcategory.php",
+          data:'catid='+val,
+          success: function(data){
+             $("#subcategory").html(data);
+          }
+       });
    }     
+</script>
+
+<!-- HTML & Script for Image Popup -->
+<?php include('includes/topheader.php'); ?>
+<script>
+    function openImageModal() {
+       $.ajax({
+          url: "get-images.php",
+          method: "GET",
+          success: function(data) {
+             $("#imageGallery").html(data);
+             $("#multiTabModal").modal('show');
+          }
+       });
+
+       // Attach an event listener to handle the close action
+       $("#multiTabModal .close, #multiTabModal .btn-danger").off("click").on("click", function () {
+          $("#multiTabModal").modal('hide');
+       });
+    }
+
+    function selectImage(imagePath) {
+       $("#postimage").val('');
+       $("#selectedImage").val(imagePath);
+       $("#imagePreview").attr('src', "postimages/" + imagePath).show();
+       $("#multiTabModal").modal('hide');
+    }
 </script>
 
 <!-- ========== Left Sidebar Start ========== -->
@@ -282,8 +317,13 @@
                                 </div><br>
                                 <div class="row clearfix">
                                     <div class="col-md-6">
-                                        <h4 class="m-b-30 m-t-0 header-title"><b>Feature Image</b></h4>
-                                        <input type="file" class="form-control" id="postimage" name="postimage"  required>
+                                        <h4 class="header-title"><b>Feature Image</b></h4>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" onclick="openImageModal()">Choose Image</button>
+                                        <input type="hidden" id="selectedImage" name="selectedImage">
+                                        <img id="imagePreview" style="max-width: 200px; display: none;" />
+                                        <input type="hidden" id="postimage" name="postimage">
+                                        <img id="uploadimagePreview" style="max-width: 200px; display: none;" />
+                                        <!-- <input type="file" class="form-control mt-2" id="postimage" name="postimage"> -->
                                     </div>
                                     <div class="col-md-6">
                                         <h4 class="m-b-30 m-t-0 header-title"><b>Feature Video</b></h4>
@@ -335,6 +375,140 @@
         </div>
     </div>
 
+
+    <!-- Modal for Image Selection and Upload -->
+    <div class="modal fade" id="multiTabModal" tabindex="-1" role="dialog" aria-labelledby="multiTabModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="multiTabModalLabel">Manage Images</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs" id="modalTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="select-tab" data-toggle="tab" href="#selectImageTab" role="tab" aria-controls="selectImageTab" aria-selected="true">Select Image</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="upload-tab" data-toggle="tab" href="#uploadImageTab" role="tab" aria-controls="uploadImageTab" aria-selected="false">Upload New</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="modalTabContent">
+                        <!-- Select Image Tab -->
+                        <div class="tab-pane fade show active" id="selectImageTab" role="tabpanel" aria-labelledby="select-tab">
+                            <div id="imageGallery" class="row mt-3"></div>
+                        </div>
+
+                        <!-- Upload Image Tab -->
+                        <div class="tab-pane fade" id="uploadImageTab" role="tabpanel" aria-labelledby="upload-tab">
+                            <form id="uploadImageForm" enctype="multipart/form-data" class="mt-3">
+                                <div class="form-group">
+                                    <label for="newImageFile">Choose Image</label>
+                                    <input type="file" class="form-control" id="postimage" name="postimage" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Upload</button>
+                            </form>
+                            <div id="uploadStatus" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+<!-- <script>
+    document.getElementById('posttitle').addEventListener('input', function() {
+        const postTitle = this.value;
+
+        // Google Translate API URL (replace YOUR_API_KEY with your actual API key)
+        const apiUrl = `https://translation.googleapis.com/language/translate/v2?key=AIzaSyCPhD2k1Ww0MC4BxC562VZZuPIO2YM1dNM`;
+
+        // Send text for translation
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                q: postTitle,
+                source: 'en',  // Source language
+                target: 'ta'   // Target language (Tamil)
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.data && data.data.translations && data.data.translations[0]) {
+                document.getElementById('tamiltitle').value = data.data.translations[0].translatedText;
+            } else {
+                console.error('Translation failed:', data);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script> -->
+
+
+<script>
+    document.getElementById('posttitle').addEventListener('input', function () {
+        const postTitle = this.value;
+
+        // Google Translate API URL (replace YOUR_API_KEY with your actual API key)
+        const apiUrl = `https://translation.googleapis.com/language/translate/v2?key=AIzaSyCPhD2k1Ww0MC4BxC562VZZuPIO2YM1dNM`;
+
+        // Check if postTitle is not empty
+        if (postTitle.trim() === "") {
+            document.getElementById('tamiltitle').value = ""; // Clear Tamil title field if input is empty
+            return;
+        }
+
+        // Send text for translation
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                q: postTitle,
+                source: 'en', // Source language
+                target: 'ta', // Target language (Tamil)
+                format: 'text',
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('API Response:', data);
+                if (data && data.data && data.data.translations && data.data.translations[0]) {
+                    document.getElementById('tamiltitle').value = data.data.translations[0].translatedText;
+                } else {
+                    console.error('Unexpected API response structure:', data);
+                    document.getElementById('tamiltitle').value = "Translation failed";
+                }
+            })
+            .catch((error) => {
+                console.error('Error occurred:', error);
+                document.getElementById('tamiltitle').value = "Error in translation";
+            });
+    });
+</script>
     
 <?php include('includes/footer.php');?>
 

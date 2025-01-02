@@ -41,24 +41,8 @@
                             </div>
                             <!-- <small class="text-muted">19% compared to last week</small> -->
                         </div>
-                        <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
-                        data-line-Width="1" data-line-Color="#f79647" data-fill-Color="#fac091">1,4,1,3,7,1</div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card overflowhidden number-chart">
-                        <div class="body">
-                            <div class="number">
-                                <h6>Live News</h6>
-                                <?php $query=mysqli_query($con,"select * from tblposts where Is_Active=1");
-                                   $countposts=mysqli_num_rows($query);
-                                ?>
-                                <span><?php echo htmlentities($countposts);?></span>
-                            </div>
-                            <!-- <small class="text-muted">19% compared to last week</small> -->
-                        </div>
-                        <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
-                        data-line-Width="1" data-line-Color="#604a7b" data-fill-Color="#a092b0">1,4,2,3,6,2</div>
+                        <!-- <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
+                        data-line-Width="1" data-line-Color="#f79647" data-fill-Color="#fac091">1,4,1,3,7,1</div> -->
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
@@ -73,21 +57,46 @@
                             </div>
                             <!-- <small class="text-muted">19% compared to last week</small> -->
                         </div>
-                        <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
-                        data-line-Width="1" data-line-Color="#4aacc5" data-fill-Color="#92cddc">1,4,2,3,1,5</div>
+                        <!-- <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
+                        data-line-Width="1" data-line-Color="#4aacc5" data-fill-Color="#92cddc">1,4,2,3,1,5</div> -->
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="card overflowhidden number-chart">
                         <div class="body">
                             <div class="number">
-                                <h6>Views Count</h6>
-                                <span>0</span>
+                                <h6>Live News</h6>
+                                <?php $query=mysqli_query($con,"select * from tblposts where Is_Active=1");
+                                   $countposts=mysqli_num_rows($query);
+                                ?>
+                                <span><?php echo htmlentities($countposts);?></span>
                             </div>
                             <!-- <small class="text-muted">19% compared to last week</small> -->
                         </div>
-                        <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
-                        data-line-Width="1" data-line-Color="#4f81bc" data-fill-Color="#95b3d7">1,3,5,1,4,2</div>
+                        <!-- <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
+                        data-line-Width="1" data-line-Color="#604a7b" data-fill-Color="#a092b0">1,4,2,3,6,2</div> -->
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card overflowhidden number-chart">
+                        <div class="body">
+                            <div class="number">
+                                <?php
+                                    session_start();
+
+                                    // Get the logged-in user's name from the session (if available)
+                                    $userName = isset($_SESSION['login']) ? $_SESSION['login'] : 'Guest'; // Default to 'Guest' if not logged in
+
+                                    $query = mysqli_query($con, "SELECT * FROM tblposts WHERE Is_Active = 1 AND postedby = '$userName'");
+                                    $postCount = mysqli_num_rows($query);
+                                ?>
+                                <h6>Post Counts(By <strong><?php echo htmlentities($userName); ?></strong>)</h6>
+                                <span><?php echo $postCount; ?></span>
+                            </div>
+                            <!-- <small class="text-muted">19% compared to last week</small> -->
+                        </div>
+                        <!-- <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
+                        data-line-Width="1" data-line-Color="#4f81bc" data-fill-Color="#95b3d7">1,3,5,1,4,2</div> -->
                     </div>
                 </div>
             </div>
@@ -95,16 +104,24 @@
             <div class="row clearfix">
 
                 <?php
-
-                    // Fetch the last added post where IsActive = 1
-                    $query = mysqli_query($con, "SELECT PostTitle, ShortDescription, PostImage FROM tblposts WHERE Is_Active = 1 ORDER BY id DESC LIMIT 1");
+                    // Fetch the last added post of the logged-in user where Is_Active = 1
+                    $loggedInUser = $_SESSION['login']; // Assuming `login` stores the username of the logged-in user
+                    $query = mysqli_query($con, "SELECT PostTitle, ShortDescription, PostImage 
+                                                 FROM tblposts 
+                                                 WHERE Is_Active = 1 AND postedby = '$loggedInUser' 
+                                                 ORDER BY id DESC 
+                                                 LIMIT 1");
                     $post = mysqli_fetch_assoc($query);
 
                     // Check if the post exists
-                    if($post) {
-                       $postTitle = $post['PostTitle'];
-                       $shortDescription = $post['ShortDescription'];
-                       $postImage = "postimages/" . $post['PostImage']; // Assuming images are stored in 'postimages' directory
+                    if ($post) {
+                        $postTitle = $post['PostTitle'];
+                        $shortDescription = $post['ShortDescription'];
+                        $postImage = "postimages/" . $post['PostImage']; // Assuming images are stored in 'postimages' directory
+                    } else {
+                        $postTitle = "No Posts Yet!";
+                        $shortDescription = "You haven't created any posts yet.";
+                        $postImage = "assets/images/no-image.jpg"; // A default image for when no post is available
                     }
                 ?>
 

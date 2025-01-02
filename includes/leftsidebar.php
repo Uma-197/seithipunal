@@ -44,6 +44,9 @@
                             </li>
                             <?php } ?>
 
+
+                            <?php if ($_SESSION['utype'] == 1 || $_SESSION['utype'] == 0) { ?>
+
                             <li class="<?php echo in_array($currentPage, ['add-category.php', 'edit-category.php', 'manage-category.php', 'add-subcategory.php', 'edit-subcategory.php', 'manage-subcategory.php']) ? 'active' : ''; ?>">
                                 <a href="javascript:void(0);" class="has-arrow"><i class="fa fa-list"></i> <span>Categories</span></a>
                                 <ul>
@@ -61,6 +64,8 @@
                                     <li class="<?php echo ($currentPage == 'manage-tags.php') ? 'active' : ''; ?>"><a href="manage-tags.php">Manage Tags</a> </li>
                                 </ul>
                             </li>
+
+                            <?php } ?>
 
                             <li class="<?php echo in_array($currentPage, ['add-post.php', 'edit-post.php', 'manage-posts.php', 'trash-posts.php']) ? 'active' : ''; ?>">
                                 <a href="javascript:void(0);" class="has-arrow"><i class="icon-globe"></i> <span>News Posts</span></a>

@@ -1,35 +1,31 @@
 <?php
- session_start();
-//Database Configuration File
-include('includes/config.php');
-//error_reporting(0);
-if(isset($_POST['login']))
-    {
-        // Getting username/ email and password
-        $uname=$_POST['username'];
-        $password=md5($_POST['password']);
+    session_start();
+        //Database Configuration File
+        include('includes/config.php');
+        //error_reporting(0);
+        if (isset($_POST['login'])) {
+            // Getting username/email and password
+            $uname = $_POST['username'];
+            $password = $_POST['password'];
 
-        // Fetch data from database on the basis of username/email and password
-        $sql =mysqli_query($con,"SELECT AdminUserName, AdminEmailId, AdminPassword, PhoneNumber, Gender, UserRole, Address, userType FROM tbladmin WHERE (AdminUserName='$uname' && AdminPassword='$password')");
-        $num=mysqli_fetch_assoc($sql);
+            // Fetch encrypted password and IV
+            $sql = mysqli_query($con, "SELECT AdminPassword, Encryption_IV, userType, AdminUserName, AdminEmailId, PhoneNumber, Gender, UserRole, Address FROM tbladmin WHERE (AdminUserName='$uname' OR AdminEmailId='$uname')");
+            $num = mysqli_fetch_assoc($sql);
 
-        //echo'<pre>'; print_r($num);die;
-
-        if($num>0)
-        {
-            $_SESSION['login']=$num['AdminUserName'];
-            $_SESSION['utype']=$num['userType'];
-            $_SESSION['AdminEmailId']=$num['AdminEmailId'];
-            $_SESSION['PhoneNumber']=$num['PhoneNumber'];
-            $_SESSION['Gender']=$num['Gender'];
-            $_SESSION['UserRole']=$num['UserRole'];
-            $_SESSION['Address']=$num['Address'];
-
-            echo "<script type='text/javascript'> document.location = 'dashboard.php'; </script>";
-        }else{
-            echo "<script>alert('Invalid Details');</script>";
+            // If user exists, decrypt and verify password
+            if ($num && openssl_decrypt($num['AdminPassword'], 'aes-256-cbc', "xRUqKhsoZ5qV6y3kqARFJFdPqJvp7X2z", 0, hex2bin($num['Encryption_IV'])) === $password) {
+                $_SESSION['login'] = $num['AdminUserName'];
+                $_SESSION['utype'] = $num['userType'];
+                $_SESSION['AdminEmailId'] = $num['AdminEmailId'];
+                $_SESSION['PhoneNumber'] = $num['PhoneNumber'];
+                $_SESSION['Gender'] = $num['Gender'];
+                $_SESSION['UserRole'] = $num['UserRole'];
+                $_SESSION['Address'] = $num['Address'];
+                echo "<script type='text/javascript'> document.location = 'dashboard.php'; </script>";
+            } else {
+                echo "<script>alert('Invalid Details');</script>";
+            }
         }
-    }
 
     /*Logo Show Starts*/
         $pagetype = 'home';

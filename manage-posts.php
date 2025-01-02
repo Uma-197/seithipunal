@@ -102,10 +102,29 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                       $query=mysqli_query($con,"select tblposts.id as postid,tblposts.PostTitle as title,tblposts.PostImage,tblposts.postedBy,tblposts.lastUpdatedBy,tblcategory.CategoryName as category,tblsubcategory.Subcategory as subcategory from tblposts left join tblcategory on tblcategory.id=tblposts.CategoryId left join tblsubcategory on tblsubcategory.SubCategoryId=tblposts.SubCategoryId where tblposts.Is_Active=1 ");
-                                       $rowcount=mysqli_num_rows($query);
-                                       if($rowcount==0)
-                                       {
+                                        // Check user type from session
+                                        $userType = $_SESSION['utype']; // Assuming 'utype' stores the user type: 0 for super admin, 1 for normal user
+                                        $loggedInUser = $_SESSION['login'];
+
+                                        // Modify query based on user type
+                                        if ($userType == '1') { // Super admin
+                                            $query = mysqli_query($con, "SELECT tblposts.id as postid, tblposts.PostTitle as title, tblposts.PostImage, tblposts.postedBy, tblposts.lastUpdatedBy, tblcategory.CategoryName as category, tblsubcategory.Subcategory as subcategory 
+                                                                         FROM tblposts 
+                                                                         LEFT JOIN tblcategory ON tblcategory.id = tblposts.CategoryId 
+                                                                         LEFT JOIN tblsubcategory ON tblsubcategory.SubCategoryId = tblposts.SubCategoryId 
+                                                                         WHERE tblposts.Is_Active = 1");
+                                        } else { // Normal user
+                                            $query = mysqli_query($con, "SELECT tblposts.id as postid, tblposts.PostTitle as title, tblposts.PostImage, tblposts.postedBy, tblposts.lastUpdatedBy, tblcategory.CategoryName as category, tblsubcategory.Subcategory as subcategory 
+                                                                         FROM tblposts 
+                                                                         LEFT JOIN tblcategory ON tblcategory.id = tblposts.CategoryId 
+                                                                         LEFT JOIN tblsubcategory ON tblsubcategory.SubCategoryId = tblposts.SubCategoryId 
+                                                                         WHERE tblposts.Is_Active = 1 AND tblposts.postedBy = '$loggedInUser'");
+                                        }
+
+                                        // Fetch results
+                                        $rowcount = mysqli_num_rows($query);
+                                        if($rowcount==0)
+                                        {
                                     ?>
                                     <tr>
                                        <td colspan="4" align="center">
