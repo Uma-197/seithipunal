@@ -91,7 +91,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <!-- <th>Image</th> -->
+                                        <th>Image</th>
                                         <th>Title</th>
                                         <th>Posted By</th>
                                         <th>Last Updated By</th>
@@ -138,7 +138,7 @@
                                     ?>
                                     <tr>
                                         <td><?php echo htmlentities($row['postid']);?></td>
-                                        <!-- <td class="postimg"><img class="img-fluid img-thumbnail" src="postimages/<?php echo htmlentities($row['PostImage']);?>" width="300"/></td> -->
+                                        <td class="postimg"><img class="img-fluid img-thumbnail" src="postimages/<?php echo htmlentities($row['PostImage']);?>" width="300"/></td>
                                         <td><?php echo htmlentities($row['title']);?></td>
                                         <td><?php echo htmlentities($row['postedBy']);?></td>
                                         <td><?php echo htmlentities($row['lastUpdatedBy']);?></td>

@@ -1,94 +1,94 @@
 <?php 
-   session_start();
-   include('includes/config.php');
-   error_reporting(0);
-   if(strlen($_SESSION['login'])==0)
-      { 
-         header('location:index.php');
-      }
-      else{
+    session_start();
+    include('includes/config.php');
+    error_reporting(0);
+    if(strlen($_SESSION['login'])==0)
+        { 
+            header('location:index.php');
+        }
+        else{
    
-         // For adding post  
-         if(isset($_POST['submit']))
-         {
-            $optionsArray = isset($_POST['options']) ? $_POST['options'] : []; // Fetch the selected options
-            $options = implode(',', $optionsArray); // Convert array to comma-separated string
-
-            $posttitle=$_POST['posttitle'];
-            $tamiltitle=$_POST['tamiltitle'];
-            $catid=$_POST['category'];
-            $subcatid=$_POST['subcategory'];
-            $tagid = $_POST['maintag'];
-            $htag = $_POST['hashtag'];
-            $district = $_POST['district'];
-            $latestnews = $_POST['latestnews'];
-            $postdetails=$_POST['postdescription'];
-            $shortdescription=$_POST['shortdescription'];
-            $postedby=$_POST['loggedInUserName'];
-            $poststatus = $_POST['poststatus'];
-            $arr = explode(" ",$posttitle);
-            $url=implode("-",$arr);
-
-
-            //$imgfile=$_FILES["postimage"]["name"];
-            $imgfile = isset($_POST['selectedImage']) ? $_POST['selectedImage'] : $_FILES["postimage"]["name"];
-            $videofile=$_FILES["postvideo"]["name"];
-
-            // get the image extension
-            $extension = substr($imgfile,strlen($imgfile)-4,strlen($imgfile));
-
-            // Get the video extension
-            $video_extension = substr($videofile, strlen($videofile) - 4, strlen($videofile));
-
-            // allowed extensions
-            $allowed_extensions = array(".jpg","jpeg",".png",".gif");
-            $allowed_video_extensions = array(".mp4", ".avi", ".mkv", ".mov");
-
-            // Validation for allowed extensions .in_array() function searches an array for a specific value.
-            if(!in_array($extension,$allowed_extensions))
+            // For adding post  
+            if(isset($_POST['submit']))
             {
-               echo "<script>alert('Invalid format. Only jpg / jpeg/ png /gif format allowed');</script>";
+                $optionsArray = isset($_POST['options']) ? $_POST['options'] : []; // Fetch the selected options
+                $options = implode(',', $optionsArray); // Convert array to comma-separated string
+
+                $posttitle=$_POST['posttitle'];
+                $tamiltitle=$_POST['tamiltitle'];
+                $catid=$_POST['category'];
+                $subcatid=$_POST['subcategory'];
+                $tagid = $_POST['maintag'];
+                $htag = $_POST['hashtag'];
+                $district = $_POST['district'];
+                $latestnews = $_POST['latestnews'];
+                $postdetails=$_POST['postdescription'];
+                $shortdescription=$_POST['shortdescription'];
+                $postedby=$_POST['loggedInUserName'];
+                $poststatus = $_POST['poststatus'];
+                $arr = explode(" ",$posttitle);
+                $url=implode("-",$arr);
+
+
+                //$imgfile=$_FILES["postimage"]["name"];
+                $imgfile = isset($_POST['selectedImage']) ? $_POST['selectedImage'] : $_FILES["postimage"]["name"];
+                $videofile=$_FILES["postvideo"]["name"];
+
+                // get the image extension
+                $extension = substr($imgfile,strlen($imgfile)-4,strlen($imgfile));
+
+                // Get the video extension
+                $video_extension = substr($videofile, strlen($videofile) - 4, strlen($videofile));
+
+                // allowed extensions
+                $allowed_extensions = array(".jpg","jpeg",".png",".gif");
+                $allowed_video_extensions = array(".mp4", ".avi", ".mkv", ".mov");
+
+                // Validation for allowed extensions .in_array() function searches an array for a specific value.
+                if(!in_array($extension,$allowed_extensions))
+                {
+                   echo "<script>alert('Invalid format. Only jpg / jpeg/ png /gif format allowed');</script>";
+                }
+                elseif ($videofile && !in_array($video_extension, $allowed_video_extensions)) {
+                   // Validate video file only if it exists
+                   echo "<script>alert('Invalid video format. Only mp4 / avi / mkv / mov formats are allowed');</script>";
+                }
+                else
+                {
+                    if (!isset($_POST['selectedImage'])) {
+                        $imgnewfile = md5($imgfile) . $extension;
+                        move_uploaded_file($_FILES["postimage"]["tmp_name"], "postimages/" . $imgnewfile);
+                    } else {
+                       $imgnewfile = $imgfile; // Use selected image
+                    }
+
+                    // Rename the video file (if uploaded)
+                    $videonewfile = $videofile ? md5($videofile) . $video_extension : null;
+
+                    // Code for move image into directory
+                    // move_uploaded_file($_FILES["postimage"]["tmp_name"],"postimages/".$imgnewfile);
+
+                    if ($videofile) {
+                        move_uploaded_file($_FILES["postvideo"]["tmp_name"], "postvideos/" . $videonewfile);
+                    }
+       
+                    $status=1;
+
+                    $query=mysqli_query($con,"insert into tblposts
+                      (PostTitle,TamilTitle,CategoryId,SubCategoryId,TagId,HashTag,District,LatestNews,PostDetails,ShortDescription,PostUrl,Is_Active,PostImage,PostVideo,postedBy,PostStatus,Options) 
+                      values
+                      ('$posttitle','$tamiltitle','$catid','$subcatid','$tagid','$htag','$district','$latestnews','$postdetails','$shortdescription','$url','$status','$imgnewfile','$videonewfile','$postedby','$poststatus','$options')");
+
+                    if($query)
+                    {
+                        $msg="Post successfully added ";
+                    }
+                    else{
+                        $error="Something went wrong . Please try again.";    
+                    }
+                }
             }
-            elseif ($videofile && !in_array($video_extension, $allowed_video_extensions)) {
-               // Validate video file only if it exists
-               echo "<script>alert('Invalid video format. Only mp4 / avi / mkv / mov formats are allowed');</script>";
-            }
-            else
-            {
-               if (!isset($_POST['selectedImage'])) {
-               $imgnewfile = md5($imgfile) . $extension;
-               move_uploaded_file($_FILES["postimage"]["tmp_name"], "postimages/" . $imgnewfile);
-            } else {
-               $imgnewfile = $imgfile; // Use selected image
-            }
 
-               // Rename the video file (if uploaded)
-               $videonewfile = $videofile ? md5($videofile) . $video_extension : null;
-
-               // Code for move image into directory
-              // move_uploaded_file($_FILES["postimage"]["tmp_name"],"postimages/".$imgnewfile);
-
-               if ($videofile) {
-                  move_uploaded_file($_FILES["postvideo"]["tmp_name"], "postvideos/" . $videonewfile);
-               }
-   
-               $status=1;
-
-               $query=mysqli_query($con,"insert into tblposts
-                  (PostTitle,TamilTitle,CategoryId,SubCategoryId,TagId,HashTag,District,LatestNews,PostDetails,ShortDescription,PostUrl,Is_Active,PostImage,PostVideo,postedBy,PostStatus,Options) 
-                  values
-                  ('$posttitle','$tamiltitle','$catid','$subcatid','$tagid','$htag','$district','$latestnews','$postdetails','$shortdescription','$url','$status','$imgnewfile','$videonewfile','$postedby','$poststatus','$options')");
-
-               if($query)
-               {
-                  $msg="Post successfully added ";
-               }
-               else{
-                  $error="Something went wrong . Please try again.";    
-               }
-            }
-         }
-      
 ?>
       
 <!-- Top Bar Start -->
@@ -106,8 +106,6 @@
    }     
 </script>
 
-<!-- HTML & Script for Image Popup -->
-<?php include('includes/topheader.php'); ?>
 <script>
     function openImageModal() {
        $.ajax({
@@ -131,6 +129,42 @@
        $("#imagePreview").attr('src', "postimages/" + imagePath).show();
        $("#multiTabModal").modal('hide');
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const uploadForm = document.getElementById("uploadForm");
+        const fileInput = document.getElementById("postimageTab");
+        const postImageHiddenInput = document.getElementById("postimage");
+        const uploadImagePreview = document.getElementById("uploadimagePreview");
+        const modal = document.getElementById("multiTabModal");
+
+        // Handle form submission
+        uploadForm.addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent default form submission
+
+            // Ensure a file is selected
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    // Update the hidden input value and preview
+                    postImageHiddenInput.value = file.name;
+                    uploadImagePreview.src = event.target.result;
+                    uploadImagePreview.style.display = "block";
+
+                    // Close the modal
+                    $(modal).modal("hide");
+                };
+
+                reader.readAsDataURL(file); // Read the selected file
+            } else {
+                alert("Please select an image to upload.");
+            }
+
+            // Reset the form
+            uploadForm.reset();
+        });
+    });
 </script>
 
 <!-- ========== Left Sidebar Start ========== -->
@@ -407,10 +441,10 @@
 
                         <!-- Upload Image Tab -->
                         <div class="tab-pane fade" id="uploadImageTab" role="tabpanel" aria-labelledby="upload-tab">
-                            <form id="uploadImageForm" enctype="multipart/form-data" class="mt-3">
+                            <form id="uploadForm" enctype="multipart/form-data" class="mt-3">
                                 <div class="form-group">
                                     <label for="newImageFile">Choose Image</label>
-                                    <input type="file" class="form-control" id="postimage" name="postimage" required>
+                                    <input type="file" class="form-control" id="postimageTab" name="postimageTab" required>
                                 </div>
                                 <button type="submit" class="btn btn-success">Upload</button>
                             </form>
