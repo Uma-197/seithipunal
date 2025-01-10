@@ -29,68 +29,62 @@
                 $arr = explode(" ",$posttitle);
                 $url=implode("-",$arr);
 
-
-                //$imgfile=$_FILES["postimage"]["name"];
                 $imgfile = isset($_POST['selectedImage']) ? $_POST['selectedImage'] : $_FILES["postimage"]["name"];
-                $videofile=$_FILES["postvideo"]["name"];
+                $videofile = $_FILES["postvideo"]["name"];
 
-                // get the image extension
-                $extension = substr($imgfile,strlen($imgfile)-4,strlen($imgfile));
+                // Debugging: Check the file name
+                error_log("Uploaded image: " . $imgfile);
+                error_log("Uploaded video: " . $videofile);
+
+                // Get the image extension (handles 3 and 4 character extensions)
+                $extension = strtolower(pathinfo($imgfile, PATHINFO_EXTENSION));
 
                 // Get the video extension
-                $video_extension = substr($videofile, strlen($videofile) - 4, strlen($videofile));
+                $video_extension = strtolower(pathinfo($videofile, PATHINFO_EXTENSION));
 
-                // allowed extensions
-                $allowed_extensions = array(".jpg","jpeg",".png",".gif");
-                $allowed_video_extensions = array(".mp4", ".avi", ".mkv", ".mov");
+                // Allowed extensions
+                $allowed_extensions = array("jpg", "jpeg", "png", "gif");
+                $allowed_video_extensions = array("mp4", "avi", "mkv", "mov");
 
-                // Validation for allowed extensions .in_array() function searches an array for a specific value.
-                if(!in_array($extension,$allowed_extensions))
-                {
-                   echo "<script>alert('Invalid format. Only jpg / jpeg/ png /gif format allowed');</script>";
-                }
-                elseif ($videofile && !in_array($video_extension, $allowed_video_extensions)) {
-                   // Validate video file only if it exists
-                   echo "<script>alert('Invalid video format. Only mp4 / avi / mkv / mov formats are allowed');</script>";
-                }
-                else
-                {
+                // Validate the image file extension
+                if ($imgfile && !in_array($extension, $allowed_extensions)) {
+                    echo "<script>alert('Invalid format. Only jpg / jpeg / png / gif format allowed');</script>";
+                } elseif ($videofile && !in_array($video_extension, $allowed_video_extensions)) {
+                    // Validate video file extension only if it exists
+                    echo "<script>alert('Invalid video format. Only mp4 / avi / mkv / mov formats are allowed');</script>";
+                } else {
+                    // Image processing if no selected image
                     if (!isset($_POST['selectedImage'])) {
-                        $imgnewfile = md5($imgfile) . $extension;
+                        $imgnewfile = md5($imgfile) . '.' . $extension;
                         move_uploaded_file($_FILES["postimage"]["tmp_name"], "postimages/" . $imgnewfile);
                     } else {
-                       $imgnewfile = $imgfile; // Use selected image
+                        $imgnewfile = $imgfile; // Use selected image
                     }
 
                     // Rename the video file (if uploaded)
-                    $videonewfile = $videofile ? md5($videofile) . $video_extension : null;
+                    $videonewfile = $videofile ? md5($videofile) . '.' . $video_extension : null;
 
-                    // Code for move image into directory
-                    // move_uploaded_file($_FILES["postimage"]["tmp_name"],"postimages/".$imgnewfile);
-
+                    // Move video file if it exists
                     if ($videofile) {
                         move_uploaded_file($_FILES["postvideo"]["tmp_name"], "postvideos/" . $videonewfile);
                     }
-       
-                    $status=1;
 
-                    $query=mysqli_query($con,"insert into tblposts
-                      (PostTitle,TamilTitle,CategoryId,SubCategoryId,TagId,HashTag,District,LatestNews,PostDetails,ShortDescription,PostUrl,Is_Active,PostImage,PostVideo,postedBy,PostStatus,Options) 
-                      values
-                      ('$posttitle','$tamiltitle','$catid','$subcatid','$tagid','$htag','$district','$latestnews','$postdetails','$shortdescription','$url','$status','$imgnewfile','$videonewfile','$postedby','$poststatus','$options')");
+                    // Insert post into database
+                    $status = 1;
+                    $query = mysqli_query($con, "INSERT INTO tblposts
+                        (PostTitle, TamilTitle, CategoryId, SubCategoryId, TagId, HashTag, District, LatestNews, PostDetails, ShortDescription, PostUrl, Is_Active, PostImage, PostVideo, postedBy, PostStatus, Options)
+                        VALUES ('$posttitle', '$tamiltitle', '$catid', '$subcatid', '$tagid', '$htag', '$district', '$latestnews', '$postdetails', '$shortdescription', '$url', '$status', '$imgnewfile', '$videonewfile', '$postedby', '$poststatus', '$options')");
 
-                    if($query)
-                    {
-                        $msg="Post successfully added ";
-                    }
-                    else{
-                        $error="Something went wrong . Please try again.";    
+                    if ($query) {
+                        $msg = "Post successfully added";
+                    } else {
+                        $error = "Something went wrong. Please try again.";
                     }
                 }
             }
 
 ?>
-      
+
 <!-- Top Bar Start -->
 <?php include('includes/topheader.php');?>
 <script>

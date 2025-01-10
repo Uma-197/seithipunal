@@ -106,7 +106,7 @@
                 <?php
                     // Fetch the last added post of the logged-in user where Is_Active = 1
                     $loggedInUser = $_SESSION['login']; // Assuming `login` stores the username of the logged-in user
-                    $query = mysqli_query($con, "SELECT PostTitle, ShortDescription, PostImage 
+                    $query = mysqli_query($con, "SELECT id, PostTitle, ShortDescription, PostImage 
                                                  FROM tblposts 
                                                  WHERE Is_Active = 1 AND postedby = '$loggedInUser' 
                                                  ORDER BY id DESC 
@@ -115,6 +115,7 @@
 
                     // Check if the post exists
                     if ($post) {
+                        $postid = $post['id'];
                         $postTitle = $post['PostTitle'];
                         $shortDescription = $post['ShortDescription'];
                         $postImage = "postimages/" . $post['PostImage']; // Assuming images are stored in 'postimages' directory
@@ -131,11 +132,32 @@
                             <h2>Recent Posts</h2>                        
                         </div>
                         <div class="body">
-                            <div class="img-postt">
+                            <!-- <div class="img-postt">
                                 <img class="d-block img-fluid" src="<?php echo $postImage; ?>" alt="First slide">
                             </div>
                             <h3><a href="#"><?php echo $postTitle; ?></a></h3>
-                            <p><?php echo $shortDescription; ?></p>
+                            <p><?php echo $shortDescription; ?></p> -->
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Image</th>
+                                        <th>Title</th>
+                                        <th>ShortDescription</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><?php echo $postid; ?></td>
+                                        <td class="postimg"><img class="img-fluid img-thumbnail" src="<?php echo $postImage; ?>" width="300"/></td>
+                                        <td><?php echo $postTitle; ?></td>
+                                        <td><?php echo $shortDescription; ?></td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                            </div>
                         </div>
                         <!-- <div class="footer">
                             <div class="actions">
