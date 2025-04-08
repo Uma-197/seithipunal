@@ -78,6 +78,17 @@
                                 </ul>
                             </li>
 
+                            <li class="<?php echo in_array($currentPage, ['add-poll.php', 'edit-poll.php', 'manage-polls.php', 'trash-polls.php']) ? 'active' : ''; ?>">
+                                <a href="javascript:void(0);" class="has-arrow"><i class="icon-globe"></i> <span>Polls</span></a>
+                                <ul>                                    
+                                    <li class="<?php echo ($currentPage == 'add-poll.php') ? 'active' : ''; ?>"><a href="add-poll.php">Add Poll</a></li>
+                                    <li class="<?php echo ($currentPage == 'manage-polls.php') ? 'active' : ''; ?>"><a href="manage-polls.php">Manage Polls</a></li>
+                                    <?php if ($_SESSION['utype'] == 1 || $_SESSION['utype'] == 0) { ?>
+                                    <li class="<?php echo ($currentPage == 'trash-polls.php') ? 'active' : ''; ?>"><a href="trash-polls.php">Trash Polls</a></li>
+                                    <?php } ?>
+                                </ul>
+                            </li>
+
                             <li class="<?php echo in_array($currentPage, ['home.php', 'aboutus.php', 'contactus.php', 'terms.php', 'privacy.php']) ? 'active' : ''; ?>">
                                 <a href="javascript:void(0);vvvv" class="has-arrow"><i class="icon-docs"></i> <span>Pages</span></a>
                                 <ul>
